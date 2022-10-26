@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head', {title: title}); %>
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/header'); %>
+    </header>
+    <main>
+      <form action='' method='POST'>
+        <div class='form-container'>
+            <h2>Sign up</h2>
+            <p>Already registered? Log in</p>
+            <div class='form-section'>
+                <label for='username'>Username:</label>
+                <input type='text' name='username' >
+            </div>
+            <div class='form-section'>
+                <label for='password'>Password:</label>
+                <input type='password' name='password'>
+            </div>
+            <div class='form-section'>
+                <label for='passwordConfirm'>Confirm Password:</label>
+                <input type='password' name='passwordConfirm'>
+            </div>
+        </div>
+        <button class='form-button'>Register</button>
+        <!-- <% if ( typeof(errors) === undefined) { %>
+            <p><%= errors %></p>
+            <% for (const error in errors) { %>
+                <p><%= error %></p>
+            <% } %>
+        <% } %> -->
+      </form>
+    </main>
+  </body>
+</html>
