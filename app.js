@@ -3,16 +3,20 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const mongoose = require('mongoose');
+const User = require('./models/user');
 const bcrypt = require('bcryptjs');
 
+// .env
 require('dotenv').config();
 
+// import routes
 const indexRouter = require('./routes/index');
 const signupRouter = require('./routes/sign-up');
+const loginRouter = require('./routes/log-in');
 
 const app = express();
 
@@ -26,14 +30,50 @@ db.on('error', console.error.bind(console, 'mongo connection error'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// passport setup
+passport.use(
+  new LocalStrategy((username, password, done) => {
+      User.findOne({ username: username }, (err, user) => {
+          if (err) {
+              return done(err);
+          }
+          if (!user) {
+              return done(null, false, { message: 'Incorrect username' });
+          }
+          bcrypt.compare(password, user.password, (err, res) => {
+              if (res) {
+                  return done(null, user);
+              } else {
+                  return done(null, false, { message: 'Incorrect password' });
+              }
+          });
+      });
+  })
+);
+
+passport.serializeUser((user, done) => done(null, user.id));
+
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => done(err, user));
+});
+
+// auth middleware setup
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
+
+// routes
 app.use('/', indexRouter);
 app.use('/sign-up', signupRouter);
+app.use('/log-in', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
