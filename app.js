@@ -17,6 +17,7 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const signupRouter = require('./routes/sign-up');
 const loginRouter = require('./routes/log-in');
+const newPostRouter = require('./routes/new-post');
 
 const app = express();
 
@@ -70,10 +71,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
+// set current user to locals object
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  console.log(res.locals.currentUser);
+  next();
+});
+
 // routes
 app.use('/', indexRouter);
 app.use('/sign-up', signupRouter);
 app.use('/log-in', loginRouter);
+app.use('/new-post', newPostRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
