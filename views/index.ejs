@@ -9,14 +9,21 @@
     </header>
     <main>
       <div class='posts-container'>
-      <% posts.forEach((post) => { %> 
-        <div class='post-container'>
-          <h2><%= post.title %></h2>
-          <p><%= post.text %></p>
-          <p><%= post.user.username %></p>
-          <p><%= post.timestamp %></p>
-        </div>
-      <% }); %> 
+        <% posts.forEach((post) => { %> 
+          <div class='post-container'>
+            <h2><%= post.title %></h2>
+            <p><%= post.text %></p>
+            <div class='info'>
+              <% if (locals.currentUser && locals.currentUser.membership) { %>
+                <p>Posted by <%= post.user.username %></p>
+                <p><%= post.date %></p>
+              <% } else { %>
+                <p>Posted by HIDDEN</p>
+                <p>HIDDEN DATE</p>
+              <% } %>
+            </div>
+          </div>
+        <% }); %> 
       </div>
     </main>
   </body>
