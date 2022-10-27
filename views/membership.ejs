@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head', {title: title}); %>
+  </head>
+  <body>
+    <header>
+      <%- include('./partials/header'); %>
+    </header>
+    <main>
+        <% if (!locals.currentUser.membership) { %>
+            <form action='' method='POST'>
+            <div class='form-container'>
+                <h2>MEMBERSHIP</h2>
+                <div class='form-section'>
+                    <label for='passcode'>Enter the passcode:</label>
+                    <input type='text' name='passcode' required>
+                </div>
+            </div>
+            <button class='form-button'>Become a member</button>
+            </form>
+        <% } else { %>
+            <h2>You are already a valuable member!!!</h2>
+        <% } %>
+    </main>
+  </body>
+</html>

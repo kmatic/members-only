@@ -9,4 +9,9 @@ router.get('/', indexController.index);
 // log out
 router.get('/log-out', indexController.logout)
 
+// membership
+router.get('/membership', indexController.membershipGet);
+
+router.post('/membership', indexController.membershipPost);
+
 module.exports = router;
