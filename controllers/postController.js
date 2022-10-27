@@ -10,11 +10,11 @@ exports.newpostGet = (req, res, next) => {
 };
 
 exports.newpostPost = [
-    body('title', 'Title must not be empty')
+    body('title', 'Title must not be empty') // this will never be empty
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('text', 'Message must not be empty')
+    body('text', 'Message must not be empty') // this will never be empty
         .trim()
         .isLength({ min: 1 })
         .escape(),

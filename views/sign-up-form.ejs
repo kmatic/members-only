@@ -24,14 +24,11 @@
                 <label for='passwordConfirm'>Confirm Password:</label>
                 <input type='password' name='passwordConfirm' required>
             </div>
+            <% if (error) { %>
+                <p style='color:red'><%= error %></p>
+            <% } %> 
         </div>
         <button class='form-button'>Register</button>
-        <!-- <% if ( typeof(errors) === undefined) { %>
-            <p><%= errors %></p>
-            <% for (const error in errors) { %>
-                <p><%= error %></p>
-            <% } %>
-        <% } %> -->
       </form>
     </main>
   </body>

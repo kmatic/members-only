@@ -21,18 +21,18 @@ exports.logout = (req, res, next) => {
 };
 
 exports.membershipGet = (req, res, next) => {
-    res.render('membership', { title: 'Join the Club'});
+    res.render('membership', { title: 'Join the Club', passcodeError: false, errors: false});
 };
 
 exports.membershipPost = [
     body('passcode', 'Passcode must be specified').trim().isLength({ min: 1 }).escape(),
     (req, res, next) => {
         const errors = validationResult(req);
-
+        console.log(errors.array());
         if (!errors.isEmpty()) {
-            return res.render('membership', { title: 'Join the Club', errors: errors.array() })
+            return res.render('membership', { title: 'Join the Club', errors: errors.array(), passcodeError: false })
         } else if (req.body.passcode !== process.env.MEMBERSHIP) {
-            return res.render('membership', { title: 'Join the Club', passcodeError: 'Wrong passcode' });
+            return res.render('membership', { title: 'Join the Club', passcodeError: 'Wrong passcode', errors: false });
         }
 
         const user = new User(res.locals.currentUser);

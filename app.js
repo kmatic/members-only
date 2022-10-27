@@ -74,7 +74,6 @@ app.use(express.urlencoded({ extended: false }));
 // set current user to locals object
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
-  console.log(res.locals.currentUser);
   next();
 });
 

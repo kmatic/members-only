@@ -5,7 +5,7 @@ const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 
 exports.signupFormGet = (req, res, next) => {
-    res.render('sign-up-form', { title: 'Sign-up'});
+    res.render('sign-up-form', { title: 'Sign-up', error: false});
 }
 
 exports.signupFormPost = [
@@ -21,7 +21,7 @@ exports.signupFormPost = [
         .withMessage('Password must be specified.'),
     body('passwordConfirm').custom((value, { req }) => {
         if (value !== req.body.password) {
-            throw new Error('Password confirmation does not match password');
+            throw new Error('Passwords do not match');
         }
         return true;
     }),
@@ -37,23 +37,35 @@ exports.signupFormPost = [
                 title: 'Sign-up',
                 user: user,
                 passwordConfirm: req.body.passwordConfirm,
-                errors: errors.array()
+                error: 'Passwords do not match' // only this error will be triggered
             });
             return;
         } else {
-            bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+            User.findOne({ username: req.body.username }).exec((err, foundUser) => {
                 if (err) {
                     return next(err);
                 }
-                const user = new User({
-                    username: req.body.username,
-                    password: hashedPassword
-                }).save((err) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    res.redirect('/log-in');
-                });
+                if (foundUser) {
+                    res.render('sign-up-form', {
+                        title: 'Sign-up',
+                        error: 'User already exists'
+                    });
+                } else {
+                    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+                        if (err) {
+                            return next(err);
+                        }
+                        const user = new User({
+                            username: req.body.username,
+                            password: hashedPassword
+                        }).save((err) => {
+                            if (err) {
+                                return next(err);
+                            }
+                            res.redirect('/log-in');
+                        });
+                    });
+                }
             });
         }
     }

@@ -18,6 +18,14 @@
                 </div>
             </div>
             <button class='form-button'>Become a member</button>
+            <% if (passcodeError) { %>
+                <p style='color:red'><%= passcodeError %></p>
+            <% } %>
+            <% if (errors) { %>
+                <% errors.forEach((error) => { %>
+                    <p style='color:red'><%= error.msg %></p>
+                <% }); %>
+            <% } %>
             </form>
         <% } else { %>
             <h2>You are already a valuable member!!!</h2>
