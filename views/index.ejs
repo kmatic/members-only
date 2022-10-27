@@ -8,7 +8,16 @@
       <%- include('./partials/header'); %>
     </header>
     <main>
-      <p>WELCOME</p>
+      <div class='posts-container'>
+      <% posts.forEach((post) => { %> 
+        <div class='post-container'>
+          <h2><%= post.title %></h2>
+          <p><%= post.text %></p>
+          <p><%= post.user.username %></p>
+          <p><%= post.timestamp %></p>
+        </div>
+      <% }); %> 
+      </div>
     </main>
   </body>
 </html>

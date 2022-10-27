@@ -1,5 +1,4 @@
 const Post = require('../models/post');
-const bcrypt = require('bcryptjs');
 
 const { body, validationResult } = require('express-validator');
 
